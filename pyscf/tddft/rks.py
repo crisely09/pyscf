@@ -51,10 +51,6 @@ def _gen_fde_rhf_response(mf, vxc_emb, fxc_emb, mo_coeff=None, mo_occ=None,
             rho0, vxc, fxc = ni.cache_xc_kernel(mol, mf.grids, mf.xc,
                                                 [mo_coeff]*2, [mo_occ*.5]*2, spin=1)
         # Add the embedding terms
-       #vxc[0][:, 0] += vxc_emb[0]
-       #vxc[0][:, 1] += vxc_emb[0]
-       #fxc[0][:, 0] += fxc_emb[0]
-       #fxc[0][:, 1] += fxc_emb[0]
         if ni._xc_type(mf.xc) == 'LDA' :
             vxc[0][:] += vxc_emb[0]
             fxc[0][:] += fxc_emb[0]
@@ -93,6 +89,7 @@ def _gen_fde_rhf_response(mf, vxc_emb, fxc_emb, mo_coeff=None, mo_occ=None,
                 if hermi == 2:
                     v1 = numpy.zeros_like(dm1)
                 else:
+                    print("hermi != 2")
                     # nr_rks_fxc_st requires alpha of dm1, dm1*.5 should be scaled
                     v1 = numint.nr_rks_fxc_st(ni, mol, mf.grids, mf.xc, dm0, dm1, 0,
                                               True, rho0, vxc, fxc,
